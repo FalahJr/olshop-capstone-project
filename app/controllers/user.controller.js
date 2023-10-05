@@ -13,6 +13,24 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
+exports.getUserById = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findByPk(userId, {
+      attributes: { exclude: ['password'] }
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User tidak ditemukan.' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 exports.updateUserProfile = async (req, res) => {
   const userId = req.params.id;
   const { username, name, email, password, phone } = req.body;

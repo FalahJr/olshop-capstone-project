@@ -17,6 +17,13 @@ module.exports = function(app) {
     controller.getAllUsers
   );
 
+  // get user by id
+  app.get(
+    "/api/user/:id",
+    [authJwt.verifyToken],
+    controller.getUserById
+  );
+
   // update profile user
   app.patch(
     "/api/user/profile/:id",
