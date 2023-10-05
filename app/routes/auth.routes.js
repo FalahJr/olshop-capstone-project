@@ -20,4 +20,5 @@ module.exports = function(app) {
 
   app.post("/api/auth/login", controller.login);
   app.post("/api/auth/signout", controller.signout);
+  app.patch("/api/auth/forgot-password", controller.forgotPassword);
 };

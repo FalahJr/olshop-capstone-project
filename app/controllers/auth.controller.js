@@ -72,3 +72,29 @@ exports.signout = async (req, res) => {
     this.next(err);
   }
 };
+
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "Email tidak terdaftar." });
+    }
+
+    const hashedPassword = bcrypt.hashSync(req.body.password, 8);
+    user.password = hashedPassword;
+    await user.save();
+    return res.status(200).json({
+      message: `Kata sandi baru telah dibuat !`,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: error.message });
+  }
+};
