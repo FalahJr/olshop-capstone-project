@@ -26,6 +26,9 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.ENUM,
       values: ["wishlist", "on progress", "completed"],
     },
+    payment_proof: {
+      type: Sequelize.STRING
+    }
   }); 
 
   return Order;
