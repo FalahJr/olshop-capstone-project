@@ -15,10 +15,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     rating: {
       type: Sequelize.INTEGER
-    },
-    created_date: {
-      type: Sequelize.DATEONLY
-    }
+    },    
   });
 
   return Product;
