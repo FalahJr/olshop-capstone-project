@@ -10,6 +10,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
   }).then((user) => {
     if (user) {
       res.status(400).send({
+        success: false,
         message: "Gagal! Username sudah digunakan !",
       });
       return;
@@ -23,6 +24,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     }).then((user) => {
       if (user) {
         res.status(400).send({
+          success: false,
           message: "Gagal! Email sudah digunakan !",
         });
         return;
