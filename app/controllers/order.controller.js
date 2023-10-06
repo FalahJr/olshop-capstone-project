@@ -4,6 +4,20 @@ const upload = require('../config/upload');
 const Order = db.order;
 const Product = db.product;
 
+exports.getAllWishlish = async (req, res) => {
+  try {
+    const orders = await Order.findAll({
+      where: {
+        status: 'wishlist'
+      }
+    });
+
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
 exports.addToWishlist = async (req, res) => {
   const { user_id, product_id } = req.body;
 
@@ -17,7 +31,7 @@ exports.addToWishlist = async (req, res) => {
     });
 
     if (existingOrder) {
-      return res.status(400).json({ message: "Produk sudah ada di wishlist." });
+      return res.status(400).json({ success: false, message: "Produk sudah ada di wishlist." });
     }
 
     const orderCode = await generateOrderCode();
@@ -112,7 +126,7 @@ exports.updateToCart = async (req, res) => {
   try {
     const order = await Order.findByPk(orderId);
     if (!order) {
-      return res.status(404).json({ message: 'Pesanan tidak ditemukan.' });
+      return res.status(404).json({ success: false, message: 'Pesanan tidak ditemukan.' });
     }
 
     let updatedPaymentProof = null;
