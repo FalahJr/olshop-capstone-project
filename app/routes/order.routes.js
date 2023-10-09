@@ -1,9 +1,9 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/order.controller");
-const upload = require('../config/upload');
+const upload = require("../config/upload");
 
-module.exports = function(app) {
-  app.use(function(req, res, next) {
+module.exports = function (app) {
+  app.use(function (req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
       "Authorization, Origin, Content-Type, Accept"
@@ -35,7 +35,7 @@ module.exports = function(app) {
   // add to cart
   app.post(
     "/api/order/add-cart",
-    upload.single('payment_proof'),
+    upload.single("payment_proof"),
     [authJwt.verifyToken],
     controller.addToCart
   );
@@ -43,9 +43,22 @@ module.exports = function(app) {
   //update to cart
   app.patch(
     "/api/order/update-cart/:id",
-    upload.single('payment_proof'),
+    upload.single("payment_proof"),
     [authJwt.verifyToken],
     controller.updateToCart
   );
 
+  //list cart by user id
+  app.get(
+    "/api/order/list-cart/user/:user_id",
+    [authJwt.verifyToken],
+    controller.listCartByUserId
+  );
+
+  //list detail cart by order id
+  app.get(
+    "/api/order/list-cart/user/:user_id/detail/:order_id",
+    [authJwt.verifyToken],
+    controller.detailCartByUserId
+  );
 };
