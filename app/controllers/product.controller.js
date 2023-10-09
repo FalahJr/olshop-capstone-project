@@ -10,40 +10,63 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
-exports.getHotProduct = async (req, res) => {
+exports.addProduct = async (req, res) => {
+  const { name, category, price } = req.body;
+  const image = req.file ? req.file.path : null;
   try {
-    const hotProducts = await Product.findAll({
-      order: [['rating', 'DESC']],
-      limit: 4
+    const newProductItem = await Product.create({
+      image: image,
+      name: name,
+      category: category,
+      price: price,
     });
 
-    res.status(200).json({
+    res.status(201).json({
       success: true,
-      hotProducts: hotProducts
+      message: "Produk berhasil ditambahkan",
+      cartItem: newProductItem,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Gagal mengambil produk hot: ' + error.message
+      message: "Gagal menambahkan produk: " + error.message,
     });
   }
 };
+// exports.getHotProduct = async (req, res) => {
+//   try {
+//     const hotProducts = await Product.findAll({
+//       order: [['rating', 'DESC']],
+//       limit: 4
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       hotProducts: hotProducts
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: 'Gagal mengambil produk hot: ' + error.message
+//     });
+//   }
+// };
 
 exports.getArrivalProduct = async (req, res) => {
   try {
     const hotProducts = await Product.findAll({
-      order: [['createdAt', 'DESC']],
-      limit: 4
+      order: [["createdAt", "DESC"]],
+      limit: 4,
     });
 
     res.status(200).json({
       success: true,
-      hotProducts: hotProducts
+      hotProducts: hotProducts,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Gagal mengambil produk hot: ' + error.message
+      message: "Gagal mengambil produk hot: " + error.message,
     });
   }
 };

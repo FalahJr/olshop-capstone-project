@@ -30,7 +30,9 @@ exports.login = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).send({ success: false, message: "User tidak ditemukan." });
+      return res
+        .status(404)
+        .send({ success: false, message: "User tidak ditemukan." });
     }
 
     const passwordIsValid = bcrypt.compareSync(
@@ -48,8 +50,8 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ id: user.id }, config.secret, {
       algorithm: "HS256",
       allowInsecureKeySizes: true,
-      expiresIn: "60s",
-      // expiresIn: 86400,
+      // expiresIn: "60s",
+      expiresIn: 86400,
     });
 
     return res.status(200).send({
@@ -83,19 +85,25 @@ exports.signout = (req, res) => {
   try {
     const token = req.headers["authorization"];
     if (!token || !token.startsWith("Bearer ")) {
-      return res.status(401).json({ success: false, message: "Token tidak valid." });
+      return res
+        .status(401)
+        .json({ success: false, message: "Token tidak valid." });
     }
 
     const authToken = token.slice(7);
 
     jwt.verify(authToken, config.secret, (err, decoded) => {
       if (err) {
-        return res.status(401).json({ success: false, message: "Token tidak valid." });
+        return res
+          .status(401)
+          .json({ success: false, message: "Token tidak valid." });
       }
 
       // Periksa apakah token sudah dinonaktifkan
       if (disabledTokens.includes(authToken)) {
-        return res.status(401).json({ success: false, message: "Token sudah dinonaktifkan." });
+        return res
+          .status(401)
+          .json({ success: false, message: "Token sudah dinonaktifkan." });
       }
       disabledTokens.push(authToken);
 
@@ -103,7 +111,10 @@ exports.signout = (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: "Terjadi kesalahan saat mencoba logout." });
+    res.status(500).json({
+      success: false,
+      message: "Terjadi kesalahan saat mencoba logout.",
+    });
   }
 };
 
@@ -118,7 +129,9 @@ exports.forgotPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({ success: false, message: "Email tidak terdaftar." });
+      return res
+        .status(404)
+        .json({ success: false, message: "Email tidak terdaftar." });
     }
 
     const hashedPassword = bcrypt.hashSync(req.body.password, 8);
